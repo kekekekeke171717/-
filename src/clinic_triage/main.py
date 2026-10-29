@@ -203,23 +203,40 @@ def cmd_serve(args) -> int:
     return 0
 
 
+def _common_args() -> argparse.ArgumentParser:
+    """全局参数放在子命令前或后都要能写 —— 不然记错顺序就报 unrecognized。
+
+    default=SUPPRESS 是关键：子命令没写这个参数时，不要拿 None 覆盖
+    前面已经给过的值。
+    """
+    ap = argparse.ArgumentParser(add_help=False)
+    for name, help_text in (("--data", "预约数据 CSV 路径"),
+                            ("--config", "配置文件路径"),
+                            ("--out", "输出目录"),
+                            ("--root", "项目根目录")):
+        ap.add_argument(name, default=argparse.SUPPRESS, help=help_text)
+    return ap
+
+
 def build_parser() -> argparse.ArgumentParser:
-    ap = argparse.ArgumentParser(prog="clinic-triage", description="门诊预约与分诊协作助手（MVP）")
+    ap = argparse.ArgumentParser(prog="clinic-triage",
+                                 description="门诊预约与分诊协作助手（MVP）")
     ap.add_argument("--data", help="预约数据 CSV 路径")
     ap.add_argument("--config", help="配置文件路径")
     ap.add_argument("--out", help="输出目录")
     ap.add_argument("--root", help="项目根目录")
+    common = _common_args()
     sub = ap.add_subparsers(dest="cmd")
 
-    d = sub.add_parser("demo", help="回放并生成看板")
-    d.add_argument("--at", help="快照时刻，如 10:00")
+    d = sub.add_parser("demo", help="回放并生成看板", parents=[common])
+    d.add_argument("--at", help="快照时刻，如 09:20")
     d.set_defaults(func=cmd_demo)
-    s = sub.add_parser("snapshot", help="打印某时刻建议队列")
-    s.add_argument("--at", help="快照时刻，如 10:00")
+    s = sub.add_parser("snapshot", help="打印某时刻建议队列", parents=[common])
+    s.add_argument("--at", help="快照时刻，如 09:20")
     s.set_defaults(func=cmd_snapshot)
-    c = sub.add_parser("check", help="数据质量检查")
+    c = sub.add_parser("check", help="数据质量检查", parents=[common])
     c.set_defaults(func=cmd_check)
-    v = sub.add_parser("serve", help="本地预览看板")
+    v = sub.add_parser("serve", help="本地预览看板", parents=[common])
     v.add_argument("--port", type=int, default=8765)
     v.add_argument("--at", help="快照时刻")
     v.set_defaults(func=cmd_serve)

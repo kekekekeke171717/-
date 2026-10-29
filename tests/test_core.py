@@ -386,8 +386,35 @@ def test_repo_sample_data_runs_end_to_end():
     patients = io_util.load_patients(data)
     assert patients
     snap = snapshot_at(patients, Config.from_dict(
-        {"simulation": {"snapshot": "10:00"}}), "assisted")
+        {"simulation": {"snapshot": "09:20"}}), "assisted")
     assert snap.counts["total"] >= 0
     issues = quality.check(patients)
     # 样例数据故意掺了脏数据，应被识别出来
     assert issues
+
+
+# ------------------------------------------------- 6. 命令行入口
+
+def test_cli_global_options_work_before_and_after_subcommand(capsys):
+    """--data 写在 check 前面还是后面都得认。
+
+    这条不是强迫症：README 和 CI 里两种写法都有，
+    记错顺序就报 unrecognized arguments 是最没必要的挫败感。
+    """
+    from clinic_triage.main import main
+
+    data = os.path.join(ROOT, "data", "appointments.csv")
+    if not os.path.exists(data):
+        return
+    assert main(["check", "--data", data]) == 0
+    assert main(["--data", data, "check"]) == 0
+    capsys.readouterr()
+    assert main(["snapshot", "--at", "09:20"]) == 0
+    out = capsys.readouterr().out
+    assert "快照 09:20" in out
+
+
+def test_cli_without_subcommand_prints_help(capsys):
+    from clinic_triage.main import main
+    assert main([]) == 2
+    assert "check" in capsys.readouterr().out

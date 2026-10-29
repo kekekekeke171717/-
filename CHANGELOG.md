@@ -21,6 +21,17 @@
 **报价与方案**
 - `docs/报价单.md` / `.docx`：首期 16 万预算内的分项报价、人天假设、验收与里程碑
 
+**工程与开源骨架**
+- `scripts/build.sh` — 一键自检：装依赖 → 造数据 → 画图 → 跑测试 → 出看板
+- `scripts/deploy.sh` — 组装 Pages 产物目录 `docs-site/`
+- `scripts/gen_docs.py` — 从 Markdown 生成 .docx 交付稿
+- `.github/workflows/ci.yml` — Python 3.10/3.11/3.12 矩阵 + pytest 覆盖率 + 端到端冒烟
+- `.github/workflows/pages.yml` — 推送 main 自动发布看板到 Pages
+- `.github/ISSUE_TEMPLATE/` — 需求反馈 / 缺陷报告（含隐私自查勾选项）
+- `.github/PULL_REQUEST_TEMPLATE.md` — 红线自查清单，缺项不予合并
+- `.gitattributes` — 统一 LF，避免跨平台协作时整份文件"被改过"
+- `requirements.txt` / `requirements-dev.txt` — 运行时零依赖，lint 工具单独放
+
 **可运行代码**
 - `src/clinic_triage/core/models.py` — 数据模型与时间换算
 - `src/clinic_triage/core/rules.py` — 6 条可解释规则，每条必带 evidence / action / explain
@@ -28,10 +39,12 @@
 - `src/clinic_triage/core/audit.py` — 审计流水与"能重建当时现场"的检查
 - `src/clinic_triage/utils/config.py` / `io.py` / `quality.py` — 配置、读写看板、数据质量
 - `src/clinic_triage/main.py` — CLI 入口 `check` / `snapshot` / `demo` / `serve`
+- `src/clinic_triage/__main__.py` — 支持 `python -m clinic_triage <子命令>` 简写，
+  全局参数写在子命令前后都认
 - `scripts/gen_data.py` — 合成数据生成器（120 条 / 2 科室，含故意注入的脏数据）
-- `config/default.yaml` — 非机密默认参数
-- `tests/test_core.py` — 规则、队列、数据质量的测试
-- `examples/demo.py` — 可直接运行的示例
+- `config/default.yaml` — 非机密默认参数（默认快照 09:20）
+- `tests/test_core.py` — 34 项测试：规则、队列回放、审计流转、数据质量、CLI
+- `examples/demo.py` — 可直接运行的示例（含"系统只产出 PENDING"的反证）
 
 ### 设计约束（写在代码注释里，不是写在 PPT 里）
 
