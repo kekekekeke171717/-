@@ -1,0 +1,12 @@
+# runtime 依赖：无。
+#
+# clinic_triage 只依赖 Python 标准库（3.9+），这是刻意的设计约束：
+# 院内环境装包要过审批，依赖越少越容易进得去。
+#
+# 下面这些只在开发 / 测试 / CI 时才需要。
+# 安装：pip install -r requirements.txt
+
+pytest>=7.4.0              # 跑 tests/
+
+# 生成 docs/*.docx 才需要（可选 —— 不做文档不用装）
+python-docx>=1.1.0

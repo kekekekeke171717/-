@@ -1,0 +1,15 @@
+# 统一换行：仓库里一律 LF，工作区按系统自动转换。
+# 避免 Windows / Linux 协作时整份文件"被改过"。
+* text=auto eol=lf
+
+# 这些是二进制，别让 Git 自作主张做换行转换
+*.png binary
+*.docx binary
+*.pdf binary
+
+# 纯文本但不允许 diff 合并失败的类型
+*.md   text eol=lf
+*.py   text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+*.sh   text eol=lf

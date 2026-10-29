@@ -1,0 +1,8 @@
+# 可选的开发工具：静态检查与类型标注。
+# 不是必须的 —— CI 里这两步失败不阻断合并。
+# 安装：pip install -r requirements-dev.txt
+
+-r requirements.txt
+
+ruff>=0.4.0                # lint + 格式
+mypy>=1.8.0                # 类型检查
