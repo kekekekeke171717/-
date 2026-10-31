@@ -117,12 +117,14 @@ clinic-triage-copilot/
 │   ├── 业务挖掘与需求洞察.md     ← Discovery Lab 访谈产出（事实编号可追溯）
 │   ├── 行业分析.md / .docx       ← 门诊分诊赛道行业分析
 │   ├── 报价单.md / .docx         ← 首期试点报价与设计方案
+│   ├── 答辩演示.pptx       ← 23 页答辩稿（原生可编辑）
+│   ├── 答辩演讲稿.md / .docx    ← 逐页讲稿，含时间预算
 │   ├── design.md          设计说明（为什么长这样）
 │   ├── api.md             接口说明（Python API + 数据结构）
 │   └── images/            两张流程图 SVG/PNG
 ├── tests/test_core.py     测试（pytest，32 项）
 ├── examples/demo.py       可运行示例（自带一小天门诊）
-├── scripts/               build.sh / deploy.sh / gen_data.py / gen_diagrams.py / gen_docs.py
+├── scripts/               build.sh / deploy.sh / gen_data.py / gen_diagrams.py / gen_docs.py / gen_ppt.py
 ├── config/default.yaml    非机密默认参数（所有阈值集中在这里）
 ├── .github/               CI + Pages 工作流、Issue 模板、PR 模板
 └── data/                  合成样例数据（非真实患者）
